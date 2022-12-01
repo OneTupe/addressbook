@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.sqlite.DBHelper
+import java.io.EOFException
 import java.util.*
 
 @Suppress("DEPRECATION")
@@ -55,24 +56,16 @@ class MainActivity : AppCompatActivity() {
                 filter(newText.toString())
                 return false
             }
-
-        })
-    }
-
-    fun filter(text: String) = if(text == ""){
+        }
+        )
+    }    fun filter(text: String) = if(text == ""){
         changeList()
     }else {
         val contactList = dbHelper.getContacts()
-        list.clear()
-        for (contact in contactList) {
-            if (("${contact.name.toLowerCase(Locale.ROOT)} ${contact.surname.toLowerCase(locale = Locale.ROOT)}").contains(text.toLowerCase(
-                    Locale.ROOT))) {
-                list.add(contact)
-
-            }
-        }
+        list = (dbHelper.getContacts().filter { (it.name.toLowerCase()+" "+it.surname.toLowerCase()).contains(text.toLowerCase())}).toMutableList()
         changeListFiltered(list)
     }
+
     private fun changeListFiltered(filters: MutableList<address>){
         adapter = RecyclerAdapter(filters) {
             if(it != -1) {
