@@ -53,16 +53,16 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                filter(newText.toString())
+                filter(newText.toString().replace(" ",""))
                 return false
             }
         }
         )
     }    fun filter(text: String) = if(text == ""){
         changeList()
+
     }else {
-        val contactList = dbHelper.getContacts()
-        list = (dbHelper.getContacts().filter { (it.name.toLowerCase()+" "+it.surname.toLowerCase()).contains(text.toLowerCase())}).toMutableList()
+        list = (dbHelper.getContacts().filter { (it.name.toLowerCase() + it.surname.toLowerCase()).contains(text.toLowerCase())}).toMutableList()
         changeListFiltered(list)
     }
 
